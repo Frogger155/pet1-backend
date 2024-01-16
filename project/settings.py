@@ -132,3 +132,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = "accounts.CustomUser"
 MEDIA_ROOT = f"{BASE_DIR}/media"
 MEDIA_URL = "/media/"
+
+ALLOWED_HOSTS = [
+    "192.168.153.128",
+]

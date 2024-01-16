@@ -21,10 +21,10 @@ class Post(models.Model):
             return "videos/{0}".format(filename)
         elif filenameExtension in Post.PICTURE_FORMATS:
             return "pictures/{0}".format(filename)
-       
+
     @property
     def contentFileExtension(self):
-        """Get the file extension"""
+        """Определяем тип файла, чтобы загрузить его в определенную папку"""
         extension = os.path.splitext(self.content.path)[1]
         if extension in Post.VIDEO_FORMATS:
             return "video"
@@ -33,14 +33,30 @@ class Post(models.Model):
         return "unknown"
 
     def __str__(self):
-        return self.title + " Type of content: " + self.getFileExtension()
+        return self.title
 
     author = models.ForeignKey(
         CustomUser,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        default="1"
     )
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_edited = models.DateTimeField(auto_now=True)
     title = models.CharField(max_length=200, null=False,
                              blank=False)
     content = models.FileField(
         upload_to=uploader_switch, blank=False, null=False)
     tags = models.ManyToManyField(Tag)
+
+
+class Like(models.Model):
+    author = models.ForeignKey(
+        CustomUser,
+        on_delete=models.CASCADE,
+        default="1"
+    )
+    post = models.ForeignKey(
+        Post,
+        on_delete=models.CASCADE,
+        default="1"
+    )
