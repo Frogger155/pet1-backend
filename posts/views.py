@@ -4,6 +4,7 @@ from rest_framework.generics import ListAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
+from django.db.models import Count
 
 from .models import Post, Tag, Like
 
@@ -17,7 +18,7 @@ from .models import Post, Tag, Like
 4. Отображение числа постов с данным тэгом, например [Мемы про котов 10000 постов] (+)
 5. [Опционально] Добавить лайки к постам, сделать view для отбора постов с наибольшим количеством лайков
 6. [Опционально] При создании поста проверять, существует ли тэг. Если да, то связывать новый пост с уже 
-   созданным тэгом, а не создавать новый
+   созданным тэгом, а не создавать новый (+)
 
 Авторизация
 
@@ -123,7 +124,7 @@ class PostLike(APIView):
     
     def post(self, request, pk):
         post = self.get_post(pk)
-        new_like = Like.objects.create(post=post)
+        Like.objects.create(post=post)
 
         return Response(status=status.HTTP_201_CREATED)
     
@@ -136,6 +137,7 @@ class PostLike(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
 class PostsMostLiked(ListAPIView):
-    pass
+    queryset = Post.objects.annotate(num_of_likes=Count('like')).order_by("num_of_likes")
+    serializer_class = PostSerializer
+ 
