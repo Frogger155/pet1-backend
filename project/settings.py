@@ -134,5 +134,5 @@ MEDIA_ROOT = f"{BASE_DIR}/media"
 MEDIA_URL = "/media/"
 
 ALLOWED_HOSTS = [
-    "192.168.153.128",
+    "*",
 ]
