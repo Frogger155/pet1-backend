@@ -12,5 +12,7 @@ class IsUserAccountOwnerOrAdmin(permissions.BasePermission):
         return request.user.is_authenticated
 
     def has_object_permission(self, request, view, user_obj):
+        if request.method in permissions.SAFE_METHODS:
+            return True
                 
         return request.user == user_obj or request.user.is_superuser
