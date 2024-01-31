@@ -11,6 +11,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ["id", "username", "password1", "password2"]
 
     def validate(self, data):
+        username_exist = CustomUser.objects.filter(username__iexact=data["username"]).exists()
+
+        if username_exist:
+            raise serializers.ValidationError("This username is already taken!")
 
         if data["password1"] != data["password2"]:
             raise serializers.ValidationError("Passwords doesn't match!")        
