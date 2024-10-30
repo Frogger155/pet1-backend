@@ -4,11 +4,13 @@ from .serializers import CustomUserSerializer
 from .models import CustomUser
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 
 from .permissions import IsUserAccountOwnerOrAdmin
 
 class UserCreate(APIView):
     serializer_class = CustomUserSerializer
+    permission_classes = (AllowAny,)
 
     def post(self, request):
         serializer = CustomUserSerializer(data=request.data)
@@ -33,3 +35,4 @@ class UserDelete(APIView):
         user_to_delete.delete()
 
         return Response(status=status.HTTP_204_NO_CONTENT, data="User deleted!")
+    

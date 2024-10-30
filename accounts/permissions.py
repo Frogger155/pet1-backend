@@ -8,6 +8,8 @@ class IsUserAccountOwnerOrAdmin(permissions.BasePermission):
     Если нет, то вызывать разрешается только SAFE-методы
     """
     def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
 
         return request.user.is_authenticated
 

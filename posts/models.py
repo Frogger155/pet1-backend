@@ -10,9 +10,13 @@ class Tag(models.Model):
     def __str__(self):
         return self.name
 
+    @property
+    def posts_count(self):
+        return Post.objects.filter(tags__name=self.name).count()
+
 
 class Post(models.Model):
-    VIDEO_FORMATS = (".mp4", ".mov", ".avi", ".webm")
+    VIDEO_FORMATS = (".mp4", ".webm")
     PICTURE_FORMATS = (".png", ".jpeg", ".jpg", ".gif")
 
     def uploader_switch(instance, filename):
@@ -38,7 +42,6 @@ class Post(models.Model):
     author = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
-        default="1"
     )
     date_created = models.DateTimeField(auto_now_add=True)
     date_edited = models.DateTimeField(auto_now=True)
